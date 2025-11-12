@@ -1,7 +1,7 @@
 # Teams MCP
 
-[![npm version](https://img.shields.io/npm/v/@floriscornel/teams-mcp.svg)](https://www.npmjs.com/package/@floriscornel/teams-mcp)
-[![npm downloads](https://img.shields.io/npm/dm/@floriscornel/teams-mcp.svg)](https://www.npmjs.com/package/@floriscornel/teams-mcp)
+[![npm version](https://img.shields.io/npm/v/@spacebridge/teams-mcp.svg)](https://www.npmjs.com/package/@spacebridge/teams-mcp)
+[![npm downloads](https://img.shields.io/npm/dm/@spacebridge/teams-mcp.svg)](https://www.npmjs.com/package/@spacebridge/teams-mcp)
 [![codecov](https://codecov.io/gh/floriscornel/teams-mcp/graph/badge.svg)](https://app.codecov.io/gh/floriscornel/teams-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/floriscornel/teams-mcp.svg)](https://github.com/floriscornel/teams-mcp/stargazers)
@@ -17,7 +17,7 @@ To use this MCP server in Cursor/Claude/VS Code, add the following configuration
   "mcpServers": {
     "teams-mcp": {
       "command": "npx",
-      "args": ["-y", "@floriscornel/teams-mcp@latest"]
+      "args": ["-y", "@spacebridge/teams-mcp@latest"]
     }
   }
 }
@@ -123,11 +123,19 @@ If `format` is not specified, the message will be sent as plain text.
 ## 📦 Installation
 
 ```bash
+
 # Install dependencies
 npm install
 
 # Build the project
 npm run build
+
+# Set TEAMS_MCP_CLIENT_ID environment variable (required)
+$env:TEAMS_MCP_CLIENT_ID="<your-client-id>"  # PowerShell
+export TEAMS_MCP_CLIENT_ID=<your-client-id>    # Bash
+
+# Set up authentication
+npm run auth
 
 # Set up authentication
 npm run auth
@@ -157,12 +165,27 @@ npm run auth
 ## 🛠️ Usage
 
 ### Starting the Server
-```bash
-# Development mode with hot reload
+
+Set the `TEAMS_MCP_CLIENT_ID` environment variable before starting:
+
+```powershell
+# PowerShell
+$env:TEAMS_MCP_CLIENT_ID="<your-client-id>"
 npm run dev
 
-# Production mode
-npm run build && node dist/index.js
+$env:TEAMS_MCP_CLIENT_ID="<your-client-id>"
+npm run build
+node dist/index.js
+```
+
+```bash
+# Bash
+export TEAMS_MCP_CLIENT_ID=<your-client-id>
+npm run dev
+
+export TEAMS_MCP_CLIENT_ID=<your-client-id>
+npm run build
+node dist/index.js
 ```
 
 ### Available MCP Tools
@@ -197,36 +220,62 @@ npm run build && node dist/index.js
 
 ## 📋 Examples
 
+
 ### Authentication
 
-First, authenticate with Microsoft Graph:
+First, set the `TEAMS_MCP_CLIENT_ID` environment variable and authenticate with Microsoft Graph:
+
+```powershell
+# PowerShell
+$env:TEAMS_MCP_CLIENT_ID="<your-client-id>"
+npx @spacebridge/teams-mcp@latest authenticate
+```
 
 ```bash
-npx @floriscornel/teams-mcp@latest authenticate
+# Bash
+export TEAMS_MCP_CLIENT_ID=<your-client-id>
+npx @spacebridge/teams-mcp@latest authenticate
 ```
 
 Check your authentication status:
 
+```powershell
+$env:TEAMS_MCP_CLIENT_ID="<your-client-id>"
+npx @spacebridge/teams-mcp@latest check
+```
+
 ```bash
-npx @floriscornel/teams-mcp@latest check
+export TEAMS_MCP_CLIENT_ID=<your-client-id>
+npx @spacebridge/teams-mcp@latest check
 ```
 
 Logout if needed:
 
+```powershell
+$env:TEAMS_MCP_CLIENT_ID="<your-client-id>"
+npx @spacebridge/teams-mcp@latest logout
+```
+
 ```bash
-npx @floriscornel/teams-mcp@latest logout
+export TEAMS_MCP_CLIENT_ID=<your-client-id>
+npx @spacebridge/teams-mcp@latest logout
 ```
 
 ### Integrating with Cursor/Claude
 
 This MCP server is designed to work with AI assistants like Claude/Cursor/VS Code through the Model Context Protocol. 
 
+You must set the `TEAMS_MCP_CLIENT_ID` environment variable in your configuration:
+
 ```json
 {
   "mcpServers": {
     "teams-mcp": {
       "command": "npx",
-      "args": ["-y", "@floriscornel/teams-mcp@latest"]
+      "args": ["-y", "@spacebridge/teams-mcp@latest"],
+      "env": {
+        "TEAMS_MCP_CLIENT_ID": "<your-client-id>"
+      }
     }
   }
 }

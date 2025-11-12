@@ -13,7 +13,15 @@ import { registerSearchTools } from "./tools/search.js";
 import { registerTeamsTools } from "./tools/teams.js";
 import { registerUsersTools } from "./tools/users.js";
 
-const CLIENT_ID = "14d82eec-204b-4c2f-b7e8-296a70dab67e";
+const CLIENT_ID =
+  process.env.TEAMS_MCP_CLIENT_ID ?? process.env.CLIENT_ID;
+
+if (!CLIENT_ID) {
+  console.error(
+    "Missing client ID. Set TEAMS_MCP_CLIENT_ID (or CLIENT_ID) in the environment."
+  );
+  process.exit(1);
+}
 const TOKEN_PATH = join(homedir(), ".msgraph-mcp-auth.json");
 
 // Authentication functions
@@ -23,7 +31,7 @@ async function authenticate() {
 
   try {
     const credential = new DeviceCodeCredential({
-      clientId: CLIENT_ID,
+      clientId: <string>CLIENT_ID,
       tenantId: "common",
       userPromptCallback: (info) => {
         console.log("\n📱 Please complete authentication:");
@@ -37,7 +45,7 @@ async function authenticate() {
     const token = await credential.getToken([
       "User.Read",
       "User.ReadBasic.All",
-      "Team.ReadBasic.All",
+      //"Team.ReadBasic.All",
       "Channel.ReadBasic.All",
       "ChannelMessage.Read.All",
       "ChannelMessage.Send",
@@ -111,7 +119,7 @@ async function logout() {
   try {
     await fs.unlink(TOKEN_PATH);
     console.log("✅ Successfully logged out");
-    console.log("🔄 Run 'npx @floriscornel/teams-mcp@latest authenticate' to re-authenticate");
+    console.log("🔄 Run 'npx @spacebridge/teams-mcp@latest authenticate' to re-authenticate");
   } catch (_error) {
     console.log("ℹ️  No authentication to clear");
   }
@@ -165,13 +173,13 @@ async function main() {
       console.log("");
       console.log("Usage:");
       console.log(
-        "  npx @floriscornel/teams-mcp@latest authenticate # Authenticate with Microsoft"
+        "  npx @spacebridge/teams-mcp@latest authenticate # Authenticate with Microsoft"
       );
       console.log(
-        "  npx @floriscornel/teams-mcp@latest check        # Check authentication status"
+        "  npx @spacebridge/teams-mcp@latest check        # Check authentication status"
       );
-      console.log("  npx @floriscornel/teams-mcp@latest logout       # Clear authentication");
-      console.log("  npx @floriscornel/teams-mcp@latest              # Start MCP server (default)");
+      console.log("  npx @spacebridge/teams-mcp@latest logout       # Clear authentication");
+      console.log("  npx @spacebridge/teams-mcp@latest              # Start MCP server (default)");
       return;
     case undefined:
       // No command = start MCP server

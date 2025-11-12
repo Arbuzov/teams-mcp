@@ -23,6 +23,7 @@ beforeEach(() => {
 
   // Reset process.argv
   process.argv = ["node", "index.js"];
+  process.env.TEAMS_MCP_CLIENT_ID = "test-client-id";
 });
 
 // Simple integration tests for basic functionality

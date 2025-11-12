@@ -45,7 +45,7 @@ export class GraphService {
           const expiresAt = new Date(this.authInfo.expiresAt);
           if (expiresAt <= new Date()) {
             console.log(
-              "Token has expired. Please re-authenticate with: npx @floriscornel/teams-mcp@latest authenticate"
+              "Token has expired. Please re-authenticate with: npx @spacebridge/teams-mcp@latest authenticate"
             );
             return;
           }
@@ -96,7 +96,7 @@ export class GraphService {
 
     if (!this.client) {
       throw new Error(
-        "Not authenticated. Please run the authentication CLI tool first: npx @floriscornel/teams-mcp@latest authenticate"
+        "Not authenticated. Please run the authentication CLI tool first: npx @spacebridge/teams-mcp@latest authenticate"
       );
     }
     return this.client;
